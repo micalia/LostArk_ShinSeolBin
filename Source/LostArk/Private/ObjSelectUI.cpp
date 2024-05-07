@@ -12,6 +12,11 @@
 #include <UMG/Public/Components/TextBlock.h>
 #include <Layout/Geometry.h>
 #include "LostArk.h"
+#include "EngineUtils.h"
+#include "UMG/Public/Components/Button.h"
+#include "HousingPlayer.h"
+#include "HousingBaseUI.h"
+#include "Components/CapsuleComponent.h"
 
 UObjSelectUI::UObjSelectUI(const FObjectInitializer& ObjectInitializer) :Super(ObjectInitializer)
 {
@@ -19,34 +24,20 @@ UObjSelectUI::UObjSelectUI(const FObjectInitializer& ObjectInitializer) :Super(O
 	if (tempSlot.Succeeded()) {
 		objSlotFactory = tempSlot.Class;
 	}
-
-}
-
-void UObjSelectUI::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
-{
-	Super::NativeTick(MyGeometry, InDeltaTime);
-
-	/* 텍스트 사라짐 효과 구현 보류 "현재 위치에 배치할 수 없습니다" 메시지
-	if (bCanNotAssignMsg) {
-		disappearCurrTime += InDeltaTime;
-
-		float opacity = disappearCurrTime / disappearDelayTime;
-		CanNotAssignMsg->SetRenderOpacity(opacity);
-
-		if (disappearCurrTime > disappearDelayTime) {
-			disappearCurrTime = 0;
-			bCanNotAssignMsg = false;
-		}
-	}*/
 }
 
 void UObjSelectUI::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	//CanNotAssignMsg = Cast<UTextBlock>(GetWidgetFromName(TEXT("CanNotAssignMsg")));
+	for (TActorIterator<AHousingPlayer> it(GetWorld()); it; ++it) {
+		HousingPlayer = *it;
+	}
 
-	AHousingGameMode* gameMode = Cast<AHousingGameMode>(GetWorld()->GetAuthGameMode());
+	gameMode = Cast<AHousingGameMode>(GetWorld()->GetAuthGameMode());
+	
+	ReturnBtn->OnClicked.AddDynamic(this, &UObjSelectUI::HousingModeOff);
+
 	FString noDataString = "";
 	for (int i = 0; i < SlotCount; i++)
 	{
@@ -68,7 +59,19 @@ void UObjSelectUI::NativeConstruct()
 			NewGridPanel->SetVerticalAlignment(VAlign_Fill);
 		}
 	}
-
-
 }
 
+void UObjSelectUI::HousingModeOff()
+{
+	SetVisibility(ESlateVisibility::Hidden);
+	if (gameMode) {
+		gameMode->housingBaseUI->SetVisibility(ESlateVisibility::Visible);
+		gameMode->bAssignModeOn = false;
+		gameMode->assignSettingUI->SetVisibility(ESlateVisibility::Hidden);
+		gameMode->CustomModeOff();
+		gameMode->bStartChangeColorPanel = true;
+		gameMode->CancelCamMove();
+		gameMode->AssignQuestSuccess(); 
+		HousingPlayer->GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	}
+}

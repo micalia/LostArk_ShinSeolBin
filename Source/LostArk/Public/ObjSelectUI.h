@@ -8,22 +8,20 @@
 #include "ObjSelectUI.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class LOSTARK_API UObjSelectUI : public UUserWidget
 {
 	GENERATED_BODY()
-	
+
 public:
-	UObjSelectUI(const FObjectInitializer &ObjectInitializer);
-	
-	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
+	UObjSelectUI(const FObjectInitializer& ObjectInitializer);
+
+	virtual void NativeConstruct() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<FObjData> objData;
-
-	virtual void NativeConstruct() override;
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class UObjSlot> objSlotFactory;
@@ -31,23 +29,21 @@ public:
 	UPROPERTY(EditAnywhere)
 	int32 SlotsPerRow = 4;
 
-	UPROPERTY(meta=(BindWidget), BlueprintReadWrite)
+	UPROPERTY(meta = (BindWidget), BlueprintReadWrite)
 	class UUniformGridPanel* UniformGridPanel;
 
 	UPROPERTY(EditAnywhere)
-	int32 SlotCount=8;
+	int32 SlotCount = 8;
 
-		UPROPERTY(meta=(BindWidget))
+	UPROPERTY(meta = (BindWidget))
 	class UCanvasPanel* ObjSelectUiPanel;
 
-	///////////////////
-	// 오브젝트 배치할 수 없음 텍스트 opacity 사라짐 효과 구현 보류
-	//////////////////
-	/*UPROPERTY(meta=(BindWidget), BlueprintReadWrite)
-	class UTextBlock* CanNotAssignMsg;
+	class AHousingPlayer* HousingPlayer;
+	class AHousingGameMode* gameMode;
 
-	bool bCanNotAssignMsg;
-	float disappearCurrTime;
-	float disappearDelayTime = 3;
-	*/
+	UPROPERTY(meta = (BindWidget))
+	class UButton* ReturnBtn;
+
+	UFUNCTION()
+	void HousingModeOff();
 };

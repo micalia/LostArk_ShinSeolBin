@@ -21,5 +21,10 @@ public:
 	UPROPERTY(meta=(BindWidget))
 	class UCanvasPanel* HousingBasePanel;
 
-	
+	UPROPERTY(meta=(BindWidget))
+	class UButton* AssignBtn;
+
+	class AHousingPlayer* HousingPlayer;
+	UFUNCTION()
+	void HousingModeOn();
 };

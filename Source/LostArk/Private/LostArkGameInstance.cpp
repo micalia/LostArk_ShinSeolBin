@@ -7,9 +7,7 @@
 
 void ULostArkGameInstance::SaveAssignObjDatas()
 {
-	//TArray<AActor*> assignObjActorArray;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AAssignObj::StaticClass(), assignObjDataArray);
-
 
 	for (int i = 0; i < assignObjDataArray.Num(); i++)
 	{
@@ -20,8 +18,6 @@ void ULostArkGameInstance::SaveAssignObjDatas()
 		objClassNameString.Add(objDataName);
 		objClassPos.Add(objDataPos);
 		objClassRot.Add(objDataRot);
-		/*housingDataArray[i]->objPos = objDataPos;
-		housingDataArray[i]->objRot= objDataRot;*/
 	}
 }
 

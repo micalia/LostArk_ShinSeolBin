@@ -198,7 +198,7 @@ void AHousingGameMode::ClickAssignBtn()
 
 void AHousingGameMode::OnMouseLeftClick()
 {
-	if (bAssignModeOn) {
+	if (bAssignModeOn) { 
 		UGameplayStatics::PlaySound2D(GetWorld(),clickSound);
 		if (bAssignMoveOn || bCustomMode == true) {
 			if (selectObj) {
