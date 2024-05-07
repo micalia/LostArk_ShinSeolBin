@@ -397,3 +397,8 @@ void AHousingGameMode::OnLevelStreamingComplete()
 {
 	InitHousingDoor();
 }
+
+void AHousingGameMode::ClickSound()
+{
+	UGameplayStatics::PlaySound2D(GetWorld(), clickSound);
+}

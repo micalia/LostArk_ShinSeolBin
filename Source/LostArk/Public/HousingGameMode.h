@@ -167,4 +167,6 @@ public:
 	class USoundBase* rotateSound;
 	UPROPERTY(EditAnywhere, Category="Sound")
 	class USoundBase* deleteSound;
+
+	void ClickSound();
 };

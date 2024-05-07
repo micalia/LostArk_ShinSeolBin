@@ -31,7 +31,7 @@ public:
 		class USceneComponent* groupComp;
 
 	UPROPERTY(BlueprintReadOnly)
-	bool bMove=false;
+	bool bMove = true;
 	void MoveObj();
 
 	UPROPERTY(BlueprintReadOnly)

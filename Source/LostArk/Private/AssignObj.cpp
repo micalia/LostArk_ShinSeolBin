@@ -39,7 +39,6 @@ void AAssignObj::Tick(float DeltaTime)
 		OverlapCheck();
 		MoveObj();
 	}
-
 }
 
 void AAssignObj::MoveObj()

@@ -20,4 +20,6 @@ public:
 	struct FObjData objNewData;
 	UPROPERTY(meta=(BindWidget))
 	class UImage* SlotImage;
+
+	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 };
