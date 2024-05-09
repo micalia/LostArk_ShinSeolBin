@@ -91,8 +91,8 @@ void UAssignSettingUI::LeftRotate()
 	FRotator originRot = settingObj->rootComp->GetComponentRotation();
 	float YawValue;
 	float NormalizedYawValue;
-
-	if (bMicroRotateMode) {
+	// UAssignSettingUI::LeftRotate()
+	if (bMicroRotateMode) { // 일반 회전 모드 : 20도 씩 회전
 		originRot.Yaw = originRot.Yaw - MicroRotateSize; 
 		YawValue = originRot.Yaw;
 		NormalizedYawValue = FMath::Fmod(YawValue, 360.0f);
@@ -101,7 +101,7 @@ void UAssignSettingUI::LeftRotate()
 			NormalizedYawValue += 360.0f; 
 		}
 	}
-	else {
+	else { // 미세 회전 모드 : 5도 씩 회전
 		originRot.Yaw = originRot.Yaw - RotateSize;
 		YawValue = originRot.Yaw;
 		NormalizedYawValue = FMath::Fmod(YawValue, 360.0f);
@@ -109,10 +109,10 @@ void UAssignSettingUI::LeftRotate()
 		{
 			NormalizedYawValue += 360.0f;
 		}
-	}
+	}														// 0xB0 => 각도 기호
 	FString YawString = FString::Printf(TEXT("%.f%c"), NormalizedYawValue, 0xB0);
 	ObjAngleTxt->SetText(FText::FromString(YawString));
-	settingObj->rootComp->SetRelativeRotation(originRot);
+	settingObj->rootComp->SetRelativeRotation(originRot); // 오브젝트 회전
 }
 
 void UAssignSettingUI::DeleteObj()

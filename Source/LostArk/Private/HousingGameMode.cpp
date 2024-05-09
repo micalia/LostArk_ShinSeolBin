@@ -152,19 +152,18 @@ void AHousingGameMode::SpawnObjActor()
 	for (int i = 0; i < ObjActorArr.Num(); i++)
 	{
 		if (ObjActorArr[i]->GetName().Equals(objClickData.objClassName)) {
-			bAssignModeOn = true;
-			bAssignMoveOn = true;
-			if (bCustomMode) { 
+			bAssignModeOn = true; // 하우징 모드 활성화
+			bAssignMoveOn = true; // 오브젝트 이동모드 활성화
+			if (bCustomMode) { //오브젝트 스폰 직후에는 오직 이동만 가능하도록 함
 				CustomModeOff();
 			}
 			selectObj = Cast<AAssignObj>(GetWorld()->SpawnActor<AActor>(ObjActorArr[i], FVector(0), FRotator(0)));
 			selectObj->objNewData = objClickData;
-			if (objClickData.objIsWallHang == true) {
+			if (objClickData.objIsWallHang == true) { // 스폰할 오브젝트가 벽걸이형 오브젝트라면 벽과 평행하도록 회전
 				selectObj->SetActorRotation(wall1Rotation);
 			}
 			break;
 		}
-
 	}
 }
 
@@ -254,14 +253,13 @@ void AHousingGameMode::CustomModeOn()
 		selectObj->bMove = false;
 		selectObj->groupComp->SetRelativeScale3D(FVector(1));
 	}
-	FVector2D ScreenLocation;
 
+	FVector2D ScreenLocation;
 	bool bResult = UGameplayStatics::ProjectWorldToScreen(controller, selectObj->GetActorLocation(), ScreenLocation);
 	if (bResult) {
 		if (assignSettingUI) {
 			assignSettingUI->settingObj = selectObj;
 			InitObjRotationTxtUI();
-
 			assignSettingUI->SetPositionInViewport(ScreenLocation);
 			assignSettingUI->SetVisibility(ESlateVisibility::Visible);
 		}

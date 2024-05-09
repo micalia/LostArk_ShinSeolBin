@@ -35,11 +35,12 @@ void UObjSelectUI::NativeConstruct()
 	}
 
 	gameMode = Cast<AHousingGameMode>(GetWorld()->GetAuthGameMode());
-	
-	ReturnBtn->OnClicked.AddDynamic(this, &UObjSelectUI::HousingModeOff);
+	if(gameMode == nullptr) return;
 
-	FString noDataString = "";
-	for (int i = 0; i < SlotCount; i++)
+	ReturnBtn->OnClicked.AddDynamic(this, &UObjSelectUI::HousingModeOff);
+	//UObjSelectUI::NativeConstruct()
+	int32 ObjCount = gameMode->objData.Num() - 1;
+	for (int i = 0; i < ObjCount; i++) //게임모드에서 읽어드린 데이터를 바탕으로 UI를 만듦
 	{
 		UObjSlot* objSlot = CreateWidget<UObjSlot>(GetWorld(), objSlotFactory);
 		if (i < gameMode->objData.Num()) {
@@ -50,10 +51,17 @@ void UObjSelectUI::NativeConstruct()
 			NewGridPanel->SetHorizontalAlignment(HAlign_Fill);
 			NewGridPanel->SetVerticalAlignment(VAlign_Fill);
 		}
-		else {
+	}
+	int EmptySlotCount = ObjCount % SlotsPerRow;
+	if (EmptySlotCount > 0) { // 인벤토리가 빈 부분은 빈 슬롯으로 메꿈
+		int ColumnFillSlot = SlotsPerRow - 1;
+		for (int j = 0; j < EmptySlotCount; j++)
+		{
+			UObjSlot* objSlot = CreateWidget<UObjSlot>(GetWorld(), objSlotFactory);
 			objSlot->objNewData = FObjData(gameMode->objData[gameMode->objData.Num() - 1].objName, gameMode->objData[gameMode->objData.Num() - 1].objIcon, gameMode->objData[gameMode->objData.Num() - 1].objClassName, gameMode->objData[gameMode->objData.Num() - 1].objIsWallHang);
-			int32 RowVal = i / SlotsPerRow;
-			int32 ColumnVal = i % SlotsPerRow;
+			int32 RowVal = ObjCount / SlotsPerRow;
+			int32 ColumnVal = ColumnFillSlot;
+			ColumnFillSlot--;
 			UUniformGridSlot* NewGridPanel = UniformGridPanel->AddChildToUniformGrid(objSlot, RowVal, ColumnVal);
 			NewGridPanel->SetHorizontalAlignment(HAlign_Fill);
 			NewGridPanel->SetVerticalAlignment(VAlign_Fill);

@@ -53,7 +53,6 @@ void AAssignObj::MoveObj()
 	FVector EndLocation = StartLocation + (WorldDirection * 20000);
 
 	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_GameTraceChannel1);
-
 	if (bHit)
 	{
 		if(HitResult.GetActor()){
@@ -64,14 +63,12 @@ void AAssignObj::MoveObj()
 						GeneralMaterial();
 					}
 					SetActorRotation(gameMode->wall1Rotation);
-				PRINT_LOG(TEXT(">> %s / %s"), *HitResult.GetActor()->GetName(), *gameMode->wall1Rotation.ToString())
 				}
 				else if (HitResult.GetActor()->GetName().Contains(TEXT("Wall2"))) {
 					if (!bOverlapChk) {
 						bCanAssign = true;
 						GeneralMaterial();
 					}
-					PRINT_LOG(TEXT(">> %s / %s"), *HitResult.GetActor()->GetName(), *gameMode->wall2Rotation.ToString())
 					SetActorRotation(gameMode->wall2Rotation);
 				}
 				else {	//벽이 아니라면
@@ -97,7 +94,7 @@ void AAssignObj::MoveObj()
 				}
 			}
 		}
-	SetActorLocation(HitLocation);
+		SetActorLocation(HitLocation);
 	}
 }
 
