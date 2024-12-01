@@ -254,18 +254,17 @@ void AHousingGameMode::CustomModeOn()
 		selectObj->groupComp->SetRelativeScale3D(FVector(1));
 	}
 
-	FVector2D ScreenLocation;
+	FVector2D ScreenLocation; // 선택된 물체의 위치를 스크린 좌표로 반환
 	bool bResult = UGameplayStatics::ProjectWorldToScreen(controller, selectObj->GetActorLocation(), ScreenLocation);
 	if (bResult) {
 		if (assignSettingUI) {
 			assignSettingUI->settingObj = selectObj;
-			InitObjRotationTxtUI();
+			InitObjRotationTxtUI(); // 하우징 UI의 위치를 위에서 반환된 스크린 좌표로 이동
 			assignSettingUI->SetPositionInViewport(ScreenLocation);
 			assignSettingUI->SetVisibility(ESlateVisibility::Visible);
 		}
 	}
 	bAssignMoveOn = false;
-
 }
 
 void AHousingGameMode::CustomModeOff()
