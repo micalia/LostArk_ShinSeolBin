@@ -7,6 +7,8 @@
 #include <Engine/DataTable.h>
 #include "HousingGameMode.generated.h"
 
+class ULevelStreamingDynamic;
+
 USTRUCT(BlueprintType)
 struct FObjData : public FTableRowBase
 {
@@ -169,4 +171,13 @@ public:
 	class USoundBase* deleteSound;
 
 	void ClickSound();
+
+	// 레벨 로딩 완료 콜백 함수
+    UFUNCTION()
+    void OnSubLevelLoaded();
+
+private:
+    // 로딩된 레벨 인스턴스를 저장하고 싶다면 여기에 포인터를 보관할 수 있음
+    UPROPERTY()
+    ULevelStreamingDynamic* LoadedLevelInstance;
 };

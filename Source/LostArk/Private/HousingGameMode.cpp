@@ -105,6 +105,28 @@ void AHousingGameMode::BeginPlay()
 			wall2Rotation = foundWalls[i]->GetActorRotation();
 		}
 	}
+
+	const FString LevelToLoad = TEXT("/Game/SB/Levels/HousingInGame"); 
+
+	bool bSuccess = false;
+
+	LoadedLevelInstance = ULevelStreamingDynamic::LoadLevelInstance(
+		GetWorld(),
+		LevelToLoad,
+		FVector::ZeroVector,
+		FRotator::ZeroRotator,
+		bSuccess
+	);
+
+	if (bSuccess && LoadedLevelInstance)
+	{
+		LoadedLevelInstance->OnLevelLoaded.AddDynamic(this, &AHousingGameMode::OnSubLevelLoaded);
+		UE_LOG(LogTemp, Log, TEXT("Started async loading of sublevel: %s"), *LevelToLoad);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to start loading level: %s"), *LevelToLoad);
+	}
 }
 
 void AHousingGameMode::Tick(float DeltaSeconds)
@@ -398,4 +420,15 @@ void AHousingGameMode::OnLevelStreamingComplete()
 void AHousingGameMode::ClickSound()
 {
 	UGameplayStatics::PlaySound2D(GetWorld(), clickSound);
+}
+
+void AHousingGameMode::OnSubLevelLoaded()
+{
+	UE_LOG(LogTemp, Log, TEXT("Sublevel fully loaded. Spawning player."));
+
+	for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; ++It)
+	{
+		APlayerController* PC = It->Get();
+		RestartPlayer(PC); // 여기서 Pawn을 안전하게 스폰
+	}
 }
